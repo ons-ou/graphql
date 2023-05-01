@@ -1,0 +1,3 @@
+input SkillInput {
+    designation: String!
+}

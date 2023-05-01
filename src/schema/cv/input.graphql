@@ -1,0 +1,15 @@
+input addCv {
+    name: String!
+    age: Int!
+    job: String!
+    user: userInput!
+    skills: [SkillInput!]
+}
+
+input modifyCv {
+    name: String
+    age: Int
+    job: String
+    user: userInput
+    skills: [SkillInput!]
+}

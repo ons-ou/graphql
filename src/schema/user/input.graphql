@@ -1,0 +1,6 @@
+input userInput {
+    username: String
+    password: String
+    email: String
+    role: Role
+}

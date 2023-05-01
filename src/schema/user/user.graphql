@@ -9,5 +9,5 @@ type user {
     password: String!
     email: String!
     role: Role!
-    cvs: [cv!]!
+    cvs: [cv!]
 }
