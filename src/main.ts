@@ -3,13 +3,15 @@ import { createYoga } from "graphql-yoga";
 import { schema } from "./schema";
 import "reflect-metadata"
 import { cvs, skills, users } from "./data";
-
+//import { PubSub } from "type-graphql";
+import{PubSub} from "graphql-subscriptions";
 const yoga = createYoga({
   schema: schema,
   context: {
   cvs : cvs,
   users : users,
-  skills: skills
+  skills: skills,
+  pubsub:new PubSub()
 },
 });
 

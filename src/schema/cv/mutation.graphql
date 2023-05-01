@@ -1,4 +1,5 @@
 type Mutation {
     createCv(input: addCv): [cv]
     updateCv(id: ID!, input: modifyCv): cv
+    deleteCv(id: ID!):String
 }

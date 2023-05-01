@@ -87,6 +87,7 @@ const createCv = (cv: any, data: any) => {
         skills: skillsId,
     };
     cvs.push(newCv);
+    data.pubsub.publish("cvCreated",{cv:newCv});
     return getCvs(data);
 }
 
@@ -116,6 +117,7 @@ const updateCv = (id: string, cv: any, data: any) => {
         newCv.skills = skillsId;
     }
     cvs[index] = newCv;
+    data.pubsub.publish("cvUpdated",{cv:newCv});
     return getCv(id, data);
 }
 

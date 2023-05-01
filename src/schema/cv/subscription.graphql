@@ -1,0 +1,8 @@
+type Subscription {
+    cvDeleted(): cv
+    cvUpdated(): cv
+    cvCreated(): cv
+}
+
+
+     
