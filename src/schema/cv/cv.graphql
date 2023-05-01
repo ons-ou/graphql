@@ -1,0 +1,8 @@
+type cv {
+    id: ID!
+    name: String!
+    age: Int!
+    job: String!
+    user: user!
+    skills: [Skill!]
+}

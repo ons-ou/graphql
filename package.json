@@ -1,0 +1,26 @@
+{
+  "dependencies": {
+    "@graphql-tools/schema": "9.0.19",
+    "@types/node": "^18.16.3",
+    "cross-env": "^7.0.3",
+    "graphql": "^15.0.0",
+    "graphql-yoga": "3.9.1",
+    "mysql2": "^3.2.4",
+    "ts-node": "^10.9.1",
+    "ts-node-dev": "^2.0.0",
+    "type-graphql": "^1.1.1",
+    "typeorm": "^0.3.15",
+    "typescript": "^5.0.4"
+  },
+  "name": "tp4",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development ts-node-dev --exit-child --respawn src/main.ts",
+    "start": "ts-node src/main.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
