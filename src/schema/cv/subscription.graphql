@@ -1,7 +1,7 @@
 type Subscription {
-    cvDeleted(): cv
-    cvUpdated(): cv
-    cvCreated(): cv
+    cvDeleted: cv
+    cvUpdated: cv
+    cvCreated: cv
 }
 
 

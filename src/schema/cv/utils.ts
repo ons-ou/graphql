@@ -1,125 +1,141 @@
 import { GraphQLError } from "graphql";
 
 const getCvUser = (id: string, users: any) => {
-    const user = users.find((user: any) => user.id === id);
-    return user;
+  const user = users.find((user: any) => user.id === id);
+  return user;
 };
 
 const getCvSkills = (ids: string[], skills: any) => {
-    const cvSkills = skills.filter((skill: any) => ids.includes(skill.id));
-    return cvSkills;
+  const cvSkills = skills.filter((skill: any) => ids.includes(skill.id));
+  return cvSkills;
 };
 
-const getCvs = (data:any) => {
-    const { cvs, users, skills } = data;
-    const cvsList = cvs.map((cv: any) => {
-        const user = getCvUser(cv.user, users);
-        const cvSkills = getCvSkills(cv.skills, skills);
-        return {
-            ...cv,
-            user: user,
-            skills: cvSkills,
-        };
-    });
-    return cvsList;
-};
-
-const getCv = (id: string, data: any) => {
-    const { cvs, users, skills } = data;
-    const cv = cvs.find((cv: any) => cv.id === id);
+const getCvs = (data: any) => {
+  const { cvs, users, skills } = data;
+  const cvsList = cvs.map((cv: any) => {
     const user = getCvUser(cv.user, users);
     const cvSkills = getCvSkills(cv.skills, skills);
     return {
-        ...cv,
-        user: user,
-        skills: cvSkills,
+      ...cv,
+      user: user,
+      skills: cvSkills,
     };
-}
+  });
+  return cvsList;
+};
+
+const getCv = (id: string, data: any) => {
+  const { cvs, users, skills } = data;
+  const cv = cvs.find((cv: any) => cv.id === id);
+  const user = getCvUser(cv.user, users);
+  const cvSkills = getCvSkills(cv.skills, skills);
+  return {
+    ...cv,
+    user: user,
+    skills: cvSkills,
+  };
+};
 
 const setCvUser = (cv: any, users: any) => {
-    if (!cv.user.username) {
-        throw new GraphQLError("Invalid user object in CV.");
-    }
+  if (!cv.user.username) {
+    throw new GraphQLError("Invalid user object in CV.");
+  }
 
-    let user = users.find((user: any) => user.username === cv.user.username);
-    
-    if (!user) {
-        if (!cv.user.password || !cv.user.email || !cv.user.role) {
-            throw new GraphQLError("Invalid user object in CV.");
-        }
-        user = {
-            ...cv.user,
-            id: (users.length + 1).toString(),
-        };
-        users.push(user);
+  let user = users.find((user: any) => user.username === cv.user.username);
+
+  if (!user) {
+    if (!cv.user.password || !cv.user.email || !cv.user.role) {
+      throw new GraphQLError("Invalid user object in CV.");
     }
-    console.log(user);
-    return user.id;
-}
+    user = {
+      ...cv.user,
+      id: (users.length + 1).toString(),
+    };
+    users.push(user);
+  }
+  return user.id;
+};
 
 const setCvSkills = (cv: any, skills: any) => {
-    const cvSkills = []
-    cv.skills.map((skill: any) => {
-        let s = skills.find((s: any) => s.designation === skill.designation);
-        if (!s) {
-            s = {
-                ...skill,
-                id: (skills.length + 1).toString(),
-            };
-            
-            skills.push(s);
-        }
-        cvSkills.push(s.id);
-    });
-    return cvSkills;
-}
+  const cvSkills = [];
+  cv.skills.map((skill: any) => {
+    let s = skills.find((s: any) => s.designation === skill.designation);
+    if (!s) {
+      s = {
+        ...skill,
+        id: (skills.length + 1).toString(),
+      };
+
+      skills.push(s);
+    }
+    cvSkills.push(s.id);
+  });
+  return cvSkills;
+};
 
 const createCv = (cv: any, data: any) => {
-    const { cvs, users, skills } = data;
-    const userId = setCvUser(cv, users);
-    const skillsId = setCvSkills(cv, skills);
-    const newCv = {
-        id: cvs.length + 1,
-        name: cv.name,
-        age: cv.age,
-        job: cv.job,
-        user: userId,
-        skills: skillsId,
-    };
-    cvs.push(newCv);
-    data.pubsub.publish("cvCreated",{cv:newCv});
-    return getCvs(data);
-}
+  const { cvs, users, skills, pubsub } = data;
+  const userId = setCvUser(cv, users);
+  const skillsId = setCvSkills(cv, skills);
+  const newCv = {
+    id: (cvs.length + 1).toString(),
+    name: cv.name,
+    age: cv.age,
+    job: cv.job,
+    user: userId,
+    skills: skillsId,
+  };
+  cvs.push(newCv);
+
+  const createdCv = getCv(newCv.id.toString(), data)
+  pubsub.publish("cvCreated", createdCv );
+  return getCvs(data);
+};
 
 const updateCv = (id: string, cv: any, data: any) => {
-    const { cvs, users, skills } = data;
-    const index = cvs.findIndex((cv: any) => cv.id === id);
-    if (index === -1) {
-        throw new GraphQLError(`Element with id '${id}' not found.`);
-    }
+  const { cvs, users, skills, pubsub } = data;
+  const index = cvs.findIndex((cv: any) => cv.id === id);
+  if (index === -1) {
+    throw new GraphQLError(`Element with id '${id}' not found.`);
+  }
 
-    const newCv = {
-        id: id,
-        name: cv.name ?? cvs[index].name,
-        age: cv.age ?? cvs[index].age,
-        job: cv.job ?? cvs[index].job,
-        user: cvs[index].user,
-        skills: cvs[index].skills,
-    };
-    
-    if (cv.user){
-        const userId = setCvUser(cv, users);
-        newCv.user = userId;
-    }
+  const newCv = {
+    id: id,
+    name: cv.name ?? cvs[index].name,
+    age: cv.age ?? cvs[index].age,
+    job: cv.job ?? cvs[index].job,
+    user: cvs[index].user,
+    skills: cvs[index].skills,
+  };
 
-    if (cv.skills){
-        const skillsId = setCvSkills(cv, skills);
-        newCv.skills = skillsId;
-    }
-    cvs[index] = newCv;
-    data.pubsub.publish("cvUpdated",{cv:newCv});
-    return getCv(id, data);
-}
+  if (cv.user) {
+    const userId = setCvUser(cv, users);
+    newCv.user = userId;
+  }
 
-export { getCvs, getCv, createCv, updateCv };
+  if (cv.skills) {
+    const skillsId = setCvSkills(cv, skills);
+    newCv.skills = skillsId;
+  }
+  cvs[index] = newCv;
 
+  const updatedCv = getCv(id, data)
+
+  pubsub.publish("cvUpdated", updatedCv );
+  return updatedCv;
+};
+
+const deleteCv = (id: string, data: any) => {
+  const { cvs, pubsub } = data;
+  const cvIndex = cvs.findIndex((cv) => cv.id === id);
+  if (cvIndex === -1) {
+    throw new GraphQLError(`Cv with ID ${id} not found.`);
+  }
+  const deletedCv = getCv(id, data)
+  pubsub.publish("cvDeleted", deletedCv );
+  cvs.splice(cvIndex, 1);
+
+  return `Cv with ID ${id} has been deleted.`;
+};
+
+export { getCvs, getCv, createCv, updateCv, deleteCv };

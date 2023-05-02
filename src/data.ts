@@ -4,16 +4,14 @@ const users = [
       username: "john_doe",
       password: "password123",
       email: "john_doe@example.com",
-      role: "USER",
-      cvs: ["1", "2"],
+      role: "USER"
     },
     {
       id: "2",
       username: "jane_doe",
       password: "password456",
       email: "jane_doe@example.com",
-      role: "ADMIN",
-      cvs: ["3"],
+      role: "ADMIN"
     },
   ];
   
