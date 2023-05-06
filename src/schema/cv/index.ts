@@ -36,7 +36,6 @@ const resolvers = {
     cvCreated: {
       subscribe: (_, __, { pubsub }) => pubsub.asyncIterator("cvCreated"),
       resolve: (payload) => {
-        console.log(payload);
         return payload;
       },
     },

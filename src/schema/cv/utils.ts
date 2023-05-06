@@ -47,9 +47,9 @@ const setCvUser = (cv: any, users: any) => {
     throw new GraphQLError("Invalid user object in CV.");
   }
 
-  let user = users.find((user: any) => user.username === cv.user.username);
-
-  if (!user) {
+  let i = users.findIndex((user: any) => user.username === cv.user.username);
+  let user;
+  if (i === -1) {
     if (!cv.user.password || !cv.user.email || !cv.user.role) {
       throw new GraphQLError("Invalid user object in CV.");
     }
@@ -58,7 +58,14 @@ const setCvUser = (cv: any, users: any) => {
       id: (users.length + 1).toString(),
     };
     users.push(user);
+  } else {
+    users[i] = {
+      ...users[i],
+      ...cv.user,
+    };
+    user = users[i];
   }
+  
   return user.id;
 };
 
