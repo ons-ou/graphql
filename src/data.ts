@@ -1,4 +1,4 @@
-const users = [
+let users = [
     {
       id: "1",
       username: "john_doe",
@@ -15,34 +15,31 @@ const users = [
     },
   ];
   
-  const cvs = [
+  let cvs = [
     {
       id: "1",
       name: "John's CV",
       age: 28,
       job: "Software Engineer",
-      user: "1",
-      skills: ["1", "2", "3"],
+      user: "1"
     },
     {
       id: "2",
       name: "John's CV 2",
       age: 30,
       job: "Senior Software Engineer",
-      user: "1",
-      skills: ["4", "5", "6"],
+      user: "1"
     },
     {
       id: "3",
       name: "Jane's CV",
       age: 25,
       job: "Data Scientist",
-      user: "2",
-      skills: ["7", "8", "9"],
+      user: "2"
     },
   ];
   
-  const skills = [
+  let skills = [
     { id: "1", designation: "JavaScript" },
     { id: "2", designation: "React" },
     { id: "3", designation: "Node.js" },
@@ -54,4 +51,16 @@ const users = [
     { id: "9", designation: "Statistics" },
   ];
 
-export {users, cvs, skills}
+  let cv_skills = [
+    { id: "1", cv_id: "1", skill_id: "1" },
+    { id: "2", cv_id: "1", skill_id: "9" },
+    { id: "3", cv_id: "1", skill_id: "3" },
+    { id: "4", cv_id: "2", skill_id: "4" },
+    { id: "5", cv_id: "2", skill_id: "2" },
+    { id: "6", cv_id: "2", skill_id: "6" },
+    { id: "7", cv_id: "3", skill_id: "7" },
+    { id: "8", cv_id: "3", skill_id: "8" },
+    { id: "9", cv_id: "3", skill_id: "2" },
+  ]
+
+export {users, cvs, skills, cv_skills}
